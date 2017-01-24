@@ -7,4 +7,11 @@ function polynomial_value(polynomial,x)
     t=t+polynomial[c]
 	return t
 end
-print(polynomial_value({1,2,3},2))
+
+function newpoly(polynomial)
+    return function(x)
+        return polynomial_value(polynomial,x)
+    end
+end
+local f = newpoly({3,0,1})
+print(f(10))

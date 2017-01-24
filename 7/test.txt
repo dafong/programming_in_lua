@@ -1,8 +1,6 @@
-third, optional numerical argument init
- specifies where to start the search; its
- default value is 1 and can be negative. A
- value of true as a fourth, optional argument
-  plain turns off the pattern matching facilities,
-   so the function does a plain "find substring"
-   operation, with no characters
- in pattern being considered magic. Note that if pl
+Reads the file file, according to the given formats, which
+specify what to read. For each format, the function returns
+a string (or a number) with the characters read, or nil if
+it cannot read data with the specified format. When called
+without formats, it uses a default format that reads the next
+line (see below).

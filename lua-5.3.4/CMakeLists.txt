@@ -36,6 +36,7 @@ set(SOURCE_FILES src/lapi.c
         src/lundump.c
         src/lutf8lib.c
         src/lvm.c
-        src/lzio.c)
+        src/lzio.c
+        helper.c helper.h)
 
 add_library(lua STATIC ${SOURCE_FILES})

@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(lua)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -DLUA_USE_DLOPEN")
+
 set(SOURCE_FILES src/lapi.c
         src/lauxlib.c
         src/lbaselib.c

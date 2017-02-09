@@ -11,4 +11,5 @@ void dumpStack(lua_State *);
 
 void error(lua_State *, const char *, ...);
 
+
 #endif //UNTITLED_HELPER_H

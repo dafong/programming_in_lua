@@ -7,3 +7,6 @@
 --
                                                                
 
+foreach({ a=1, b=2, c=3},function(k,v)
+    print(k.."="..v)
+end)

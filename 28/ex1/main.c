@@ -15,7 +15,9 @@ static int l_filter(lua_State *L){
         lua_rawgeti(L,1,i); // table func func val
         lua_call(L,1,1);
         lua_rawseti(L,1,i);
+        lua_pushvalue(L,-1);
     }
+
     return 1;
 }
 

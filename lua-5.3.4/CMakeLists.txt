@@ -33,11 +33,13 @@ set(SOURCE_FILES src/lapi.c
         src/ltablib.c
         src/ltm.c
         src/lua.c
-        src/luac.c
+#        src/luac.c
         src/lundump.c
         src/lutf8lib.c
         src/lvm.c
         src/lzio.c
         helper.c helper.h)
 
-add_library(lua STATIC ${SOURCE_FILES})
+add_library(lua SHARED ${SOURCE_FILES})
+
+

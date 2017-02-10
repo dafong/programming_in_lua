@@ -5,7 +5,7 @@
 -- Time: 下午2:22
 -- To change this template use File | Settings | File Templates.
 --
-local lib = require("mylib")
+local lib = require("libmylib")
 lib.test1()
 lib.test2()
 

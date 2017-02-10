@@ -4,7 +4,6 @@ project(ex6)
 include_directories(lua lua/src)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 add_subdirectory(lua)
-add_subdirectory(mylib)
 
 set(SOURCE_FILES main.c )
 

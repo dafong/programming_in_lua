@@ -9,16 +9,24 @@
 
 static int l_iter(lua_State *L){
     DIR **d = (DIR **)luaL_checkudata(L,lua_upvalueindex(1),"Ex.dir");
+    if(*d == NULL){
+        return 0;
+    }
     struct dirent *entry = readdir(*d);
     if(entry != NULL){
         lua_pushstring(L,entry->d_name);
         return 1;
     }
+    closedir(*d);
+    *d = NULL;
     return 0;
 }
 
 static int l_gc(lua_State *L){
     DIR **d = (DIR **)luaL_checkudata(L,1,"Ex.dir");
+    if(*d == NULL){
+        return 0;
+    }
     closedir(*d);
     return 0;
 }

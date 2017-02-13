@@ -7,8 +7,7 @@
 --
 
 local array = require"array"
-local a = array.new(3)
+local a = array.new(64)
 array.set(a,2,true)
 print(tostring(array.get(a,1)))
 print(tostring(array.get(a,2)))
-array.set(a,2,{})

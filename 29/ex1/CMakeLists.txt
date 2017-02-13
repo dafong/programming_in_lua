@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.5.1)
 project(ex1)
-include_directories(lua lua/src)
+
 set(CMAKE_C_STANDARD 99)
+include_directories(lua lua/src)
 add_subdirectory(lua)
 set(SOURCE_FILES main.c)
 add_executable(ex1 ${SOURCE_FILES})

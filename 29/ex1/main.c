@@ -17,10 +17,10 @@ typedef struct NumArray{
 static int newarray(lua_State *L){
     int size = luaL_checkinteger(L,1);
     luaL_argcheck(L,size>1,1,"invalid size");
-    size_t  bytes   = sizeof( NumArray) + I_WORD(size - 1) * sizeof(unsigned int );
+    size_t  bytes   = sizeof( NumArray) + I_WORD(size - 1)  * sizeof(unsigned int );
     NumArray *array = (NumArray *)lua_newuserdata(L,bytes);
     array->size     = size;
-    for(int i = 0;i<size;i++){
+    for(int i = 0;i<=I_WORD(size-1);i++){
         array->values[i] = 0;
     }
     return 1;

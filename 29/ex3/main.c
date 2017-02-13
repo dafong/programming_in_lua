@@ -119,9 +119,6 @@ static int intersectionarray(lua_State *L){
     return 1;
 }
 
-
-
-
 const static luaL_Reg funcs[] = {
         {"new", newarray},
         {"get", getarray},

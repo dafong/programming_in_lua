@@ -10,6 +10,7 @@
 typedef struct lxp_userdata{
     XML_Parser  parser;
     lua_State   *L;
+    int cbref;
 } lxp_userdata;
 
 static void f_StartElement(void *ud, const char *name, const char **atts);
@@ -28,7 +29,9 @@ static int l_new(lua_State *L){
 
     luaL_checktype(L,1,LUA_TTABLE);
     lua_pushvalue(L,1);
-    lua_setuservalue(L,-2);
+    lu->cbref = luaL_ref(L,LUA_REGISTRYINDEX);
+//    lua_pushvalue(L,1);
+//    lua_setuservalue(L,-2);
     XML_SetUserData(p,lu);
     XML_SetElementHandler(p,f_StartElement,f_EndElement);
     XML_SetCharacterDataHandler(p,f_CharData);
@@ -40,7 +43,7 @@ static int l_parse(lua_State *L){
     luaL_argcheck(L,lu->parser != NULL ,1,"parse is closed");
     size_t len;
     const char *content = luaL_checklstring(L,2,&len);
-    lua_getuservalue(L,1);
+//    lua_getuservalue(L,1);
     lu->L = L;
     int status = XML_Parse(lu->parser,content,len,1);
     lua_pushboolean(L,status);
@@ -52,6 +55,7 @@ static int l_close(lua_State *L){
     if(lu->parser)
         XML_ParserFree(lu->parser);
     lu->parser = NULL;
+    luaL_unref(L,LUA_REGISTRYINDEX,lu->cbref);
     return 0;
 }
 
@@ -86,7 +90,8 @@ static void f_EndElement(void *ud,const char *name){
     lxp_userdata *lu = (lxp_userdata *)ud;
 
     lua_State *L = lu->L;
-    lua_getfield(L,3,"EndElement");
+    lua_rawgeti(L,LUA_REGISTRYINDEX,lu->cbref);
+    lua_getfield(L,-1,"EndElement");
     if(lua_isnil(L,-1)){
         lua_pop(L,1);
         return;
@@ -99,11 +104,14 @@ static void f_EndElement(void *ud,const char *name){
 static void f_StartElement(void *ud, const char *name, const char **atts){
     lxp_userdata *lu = (lxp_userdata *)ud;
     lua_State *L = lu->L;
-    lua_getfield(L,3,"StartElement");
+    lua_rawgeti(L,LUA_REGISTRYINDEX,lu->cbref);
+    lua_getfield(L,-1,"StartElement");
+
     if(lua_isnil(L,-1)){
         lua_pop(L,1);
         return;
     }
+
     lua_pushvalue(L,1);
     lua_pushstring(L,name);
     lua_newtable(L);
@@ -124,7 +132,8 @@ static void f_StartElement(void *ud, const char *name, const char **atts){
 static void f_CharData(void *ud, const char *s,int len){
     lxp_userdata *lu = (lxp_userdata *)ud;
     lua_State *L = lu->L;
-    lua_getfield(L,3,"ChatacterData");
+    lua_rawgeti(L,LUA_REGISTRYINDEX,lu->cbref);
+    lua_getfield(L,-1,"ChatacterData");
     if(lua_isnil(L,-1)){
         lua_pop(L,1);
         return;

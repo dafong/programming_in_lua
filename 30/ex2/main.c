@@ -20,7 +20,7 @@ static int l_new(lua_State *L){
     size_t size = sizeof(struct lxp_userdata);
     lxp_userdata *lu = (lxp_userdata *)lua_newuserdata(L,size);
     luaL_setmetatable(L,"Ex.lxp");
-    lu->L = L;
+
     XML_Parser p;
     p=lu->parser = XML_ParserCreate(NULL);
     if(!p)
@@ -58,17 +58,25 @@ static int l_close(lua_State *L){
 
 const static luaL_Reg funcs[] = {
         {"new",l_new},
-        {"parse",l_parse},
-        {"close",l_close},
         {NULL,NULL}
 
 };
 
+const static luaL_Reg mefuncs[] = {
+        {"parse",l_parse},
+        {"close",l_close},
+        {NULL,NULL}
+};
 static int luaopen_lxp(lua_State *L){
 
     luaL_newmetatable(L,"Ex.lxp");
-    lua_pushcfunction(L,l_close);
-    lua_setfield(L,-2,"__gc");
+
+    lua_pushvalue(L,-1);
+
+    lua_setfield(L,-2,"__index");
+
+    luaL_setfuncs(L,mefuncs,0);
+
     luaL_newlib(L,funcs);
     return 1;
 }
@@ -98,11 +106,18 @@ static void f_StartElement(void *ud, const char *name, const char **atts){
     lua_pushvalue(L,1);
     lua_pushstring(L,name);
     lua_newtable(L);
+    lua_newtable(L);
+    int i = 1;
     for(;*atts;atts+=2){
         lua_pushstring(L,*(atts + 1));
-        lua_setfield(L,-2,*atts);
+        lua_setfield(L,-3,*atts);
+
+        lua_pushstring(L,*atts);
+        lua_rawseti(L,-2,i++);
+
     }
-    lua_call(L,3,0);
+
+    lua_call(L,4,0);
 }
 
 static void f_CharData(void *ud, const char *s,int len){
